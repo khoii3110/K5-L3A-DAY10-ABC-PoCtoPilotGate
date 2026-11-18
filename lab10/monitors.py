@@ -19,7 +19,14 @@ def escalation_rate(trials):
     return sum(t["status"] == "escalated" for t in trials) / max(1, len(trials))
 
 
+def refund_mismatch_rate(trials):
+    mismatches = sum(any(e.get("type") == "guard" and e.get("kind") == "refund_mismatch"
+                         for e in t["events"]) for t in trials)
+    return mismatches / max(1, len(trials))
+
+
 MONITORS = {
     "escalation_rate": escalation_rate,     # có sẵn; KHÔNG tính là metric mới của đội
+    "refund_mismatch_rate": refund_mismatch_rate,
 }
 STARTER_MONITORS = ("escalation_rate",)

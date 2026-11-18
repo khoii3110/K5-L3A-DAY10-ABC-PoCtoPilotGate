@@ -104,9 +104,11 @@ class TestOperatingGates(unittest.TestCase):
         self.assertEqual(a["failed"], b["failed"])
 
     def test_pilot_scope_by_warehouse(self):
-        trials = self.run_with(self.gates(business={"pilot_scope": {"mode": "warehouse", "warehouses": ["HN"]}}))
+        gates = self.gates(business={"pilot_scope": {"mode": "warehouse", "warehouses": ["HN"]}})
+        trials = self.run_with(gates)
         self.assertTrue(trials)
-        self.assertEqual({t["warehouse"] for t in trials} - {None}, {"HN"})
+        self.assertEqual({t["warehouse"] for t in trials}, {"HN"})
+        self.assertFalse(ops.in_scope({"order_id": "O-UNKNOWN"}, self.world, gates))
         none = self.run_with(self.gates(business={"pilot_scope": {"mode": "percent", "percent": 0}}))
         self.assertEqual(none, [])
 

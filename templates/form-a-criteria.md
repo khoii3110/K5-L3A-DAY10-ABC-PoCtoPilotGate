@@ -2,7 +2,7 @@
 
 **Bàn:** `K5-L3A-DAY10-ABC-PoCtoPilotGate1` · **Người cầm bút chính:** vai Sản phẩm và kinh doanh (câu 1.3: Kỹ sư cổng; câu 1.2, 1.4: Vận hành và pháp lý)
 
-**Trạng thái:** Bản nháp đề xuất; nhóm cần đối chiếu PRD v1.1 và eval card Lab 9 trước khi ký.
+**Trạng thái:** Đã ký và xác minh hash. Các ngưỡng là lựa chọn đề xuất; tiêu chí đã ký là bất biến và không được sửa sau khi đo.
 
 Điền phiếu này **trước khi chạy trợ lý lần nào**. Viết xong thì chép ngưỡng sang `config/acceptance_criteria.json`, ký ở phút 60–65,
 rồi mới chạy đánh giá. Khối 1 không sửa code.
@@ -124,7 +124,7 @@ Giải thích một câu: Chênh lệch 1/50 lần chạy không đủ chứng m
 - Bản cuối của từng câu → chép **ngưỡng** vào `required` / `nice_to_have` / `business_ops`, chép **hành động** vào `decision_rule`
   (bốn dòng: Tiếp tục, Thu hẹp, Cải tiến thêm, Dừng) và `stop_condition`. Các khoá này nằm ngay trong `config/acceptance_criteria.json`.
 - Nhóm `business_ops` (chi phí mỗi ticket tối đa, ROI tối thiểu, số ca ùn tối đa): `cost_per_ticket_vnd_max` **8.000đ** · `roi_min` **0,10** · `queue_stuck_max` **0**
-- Căn cứ dự thảo: chi phí làm tay và duyệt là 10.000đ/ticket; một người duyệt xử lý 6 ca/giờ; phí giữ chỗ 30.000đ/người/ca. Ngưỡng 8.000đ/ticket và ROI 0,10 là đề xuất để pilot có tiết kiệm thực, cần nhóm đối chiếu với PRD/eval card trước khi ký.
+- Căn cứ đã dùng khi ký: chi phí làm tay và duyệt là 10.000đ/ticket; một người duyệt xử lý 6 ca/giờ; phí giữ chỗ 30.000đ/người/ca. Ngưỡng 8.000đ/ticket và ROI 0,10 là lựa chọn đề xuất của nhóm; đối chiếu PRD/eval card khi rà soát trước pilot.
 - Ngày xem lại tiêu chí: **trước khi bắt đầu pilot thật, và sau 7 ngày hoặc 500 ticket (mốc nào đến trước)** · Ai dự: **Sản phẩm và kinh doanh, Kỹ sư cổng, Vận hành và pháp lý, chị Oanh và chị Hạnh** (ghi vào Phiếu B mục B8, dòng "Ngày quyết định lại").
 
 **Gợi ý chọn ngưỡng:** các chỉ số an toàn (`wrongful_refund_vnd_max`, `wrongful_carrier_faults_max`, `pii_leaks_max`) có thể để 0; với chi phí, tỉ lệ và ROI, xem `data/world.json` mục `ops_facts`.
@@ -149,7 +149,7 @@ git add config/acceptance_criteria.json config/acceptance_criteria.lock && git c
 | Mục | Điền |
 |---|---|
 | Đã ký lúc (giờ máy in hoặc `signed_at` trong `config/acceptance_criteria.lock`) | `2026-11-18T17:35:11` |
-| Mã commit `Sign acceptance criteria` (7 ký tự đầu, `git log --oneline -1`) | Chưa có |
-| Đã push lên `origin main` thành công? | Chưa |
+| Mã commit `Sign acceptance criteria` (7 ký tự đầu, `git log --oneline -1`) | `e78c419` |
+| Đã push lên `origin main` thành công? | Có (`main` đồng bộ với `origin/main`) |
 
 Sau bước này **không sửa** `config/acceptance_criteria.json`, kể cả mở rồi lưu lại bằng trình soạn thảo tự định dạng.

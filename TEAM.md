@@ -2,10 +2,10 @@
 
 ## Thông tin nhóm
 
-- Tên nhóm (`TenNhom`, không dấu, không khoảng trắng):
-- Lớp: `L3A` / `L3B`
-- Repo của bàn: `K5-<L3A|L3B>-DAY10-<TenNhom>-PoCtoPilotGate1`
-- Thẻ sự cố đã bốc (S1–S8):
+- Tên nhóm (`TenNhom`, không dấu, không khoảng trắng): ABC
+- Lớp: `L3A`
+- Repo của bàn: `https://github.com/khoii3110/K5-L3A-DAY10-ABC-PoCtoPilotGate`
+- Thẻ sự cố đã bốc (S1–S8): `S1`
 
 ## Thành viên
 
@@ -13,10 +13,10 @@ Họ tên đầy đủ và MSSV của **mọi** thành viên; thêm dòng nếu 
 
 | STT | Họ và tên | MSSV | Vai | Trưởng nhóm |
 | --: | --------- | ---- | --- | :---------: |
-|   1 |           |      |     |             |
-|   2 |           |      |     |             |
-|   3 |           |      |     |             |
-|   4 |           |      |     |             |
+|   1 | Nguyễn Minh Khôi | 2A202603528 | Trưởng nhóm; Vận hành và pháp lý (PIC) | Có |
+|   2 | Nguyễn Văn Đăng | 2A202603371 | | |
+|   3 | | | | |
+|   4 | | | | |
 
 Ghi `members` trong `submission/submission.json` theo dạng `"HoVaTen-MSSV"`, khớp bảng trên.
 
@@ -24,20 +24,36 @@ Ghi `members` trong `submission/submission.json` theo dạng `"HoVaTen-MSSV"`, k
 
 Mỗi thành viên tự viết một mục bên dưới (chép mẫu, đổi tiêu đề thành họ tên không dấu và MSSV, ví dụ `## NguyenVanAn-20241234`).
 
-## HoVaTen-MSSV
+## NguyenMinhKhoi-2A202603528
 
 ### Phần việc phụ trách
 
-Vai trong bàn; câu nào của đề, mục nào của phiếu A/B/C, file nào (`lab10/guards.py`, `config/operating_gates.json`, …).
+Trưởng nhóm và PIC; đã xác nhận quyết định thu hẹp phạm vi để loại ticket không xác định kho cho tới khi xác minh, và xác nhận thẻ đã bốc là S1.
 
 ### Đóng góp cụ thể
 
-...
+Đã cung cấp thông tin nhóm/PIC và chốt quyết định v1 trong trao đổi. Có sử dụng Copilot AI để hỗ trợ rà soát hướng dẫn, sửa cổng phạm vi, cập nhật Phiếu B và chạy kiểm thử; cần tự rà soát, hiểu và xác nhận các thay đổi trước khi nộp.
 
 ### Bằng chứng
 
-Mã commit, mã lần chạy (`runs/<mã>`), dòng trong phiếu.
+`R-base-after-20261118-181755-954705`; Phiếu B mục B7.4/B8.
 
 ### Exit ticket
 
-Một điều học được, một điều còn chưa chắc.
+
+
+## NguyenVanDang-2A202603371
+
+### Phần việc phụ trách
+
+
+
+### Đóng góp cụ thể
+
+
+
+### Bằng chứng
+
+
+
+### Exit ticket

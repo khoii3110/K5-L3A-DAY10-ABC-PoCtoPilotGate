@@ -34,9 +34,55 @@ from .tools import Verdict
 
 
 def pre_guard(ctx):
-    return Verdict.allow()
+    policy = H.effective_policy(ctx.tools.lookup_policies(), ctx.as_of)
+    if policy is None:
+        return Verdict.escalate("không tìm thấy chính sách có hiệu lực")
+    ctx.log("policy_pinned", policy_id=policy["policy_id"])
+    return Verdict.allow(policy_id=policy["policy_id"])
 
 
 def write_gate(ctx, action):
     # action = {"tool": "issue_refund", "ticket_id":..., "order_id":..., "amount_vnd":..., "payer":..., ...}
+    tool = action.get("tool")
+    order_id = action.get("order_id") or (action.get("payload") or {}).get("order_id")
+    order = ctx.tools.lookup_order(order_id)
+    if tool in ("issue_refund", "file_carrier_fault", "notify_carrier") and order is None:
+        return Verdict.escalate("không tìm thấy đơn để xác minh thao tác ghi")
+
+    policy_id = next((e.get("policy_id") for e in reversed(ctx.events)
+                      if e.get("type") == "policy"), None)
+    policy = next((p for p in ctx.tools.lookup_policies() if p["policy_id"] == policy_id), None)
+
+    if tool == "issue_refund":
+        if policy is None:
+            return Verdict.escalate("không xác minh được chính sách áp dụng")
+        parcel = H.ticket_parcel(order, ctx.ticket, ctx.as_of)
+        delay = H.db_delay_days(parcel, ctx.as_of)
+        cause = parcel.get("delay_cause") or ("CARRIER" if delay > 0 else None)
+        expected = H.entitlement_vnd(policy, order, delay, cause)
+        if action.get("amount_vnd") != expected:
+            ctx.log("refund_mismatch", proposed_vnd=action.get("amount_vnd"),
+                    expected_vnd=expected, db_delay_days=delay)
+            return Verdict.escalate("số tiền đề xuất không khớp tracking và chính sách; chuyển người duyệt")
+
+    if tool == "file_carrier_fault":
+        parcel = next((p for p in order["parcels"] if p["parcel_id"] == action.get("parcel_id")), None)
+        if policy is None or parcel is None:
+            return Verdict.deny("không xác minh được chính sách hoặc kiện hàng để ghi lỗi hãng")
+        delay = H.db_delay_days(parcel, ctx.as_of)
+        if (action.get("delay_days") != delay
+                or not H.carrier_at_fault(policy, parcel, delay)):
+            ctx.log("carrier_fault_blocked", parcel_id=action.get("parcel_id"),
+                    proposed_delay_days=action.get("delay_days"), db_delay_days=delay,
+                    recorded_cause=parcel.get("delay_cause"))
+            return Verdict.deny("không ghi lỗi hãng khi độ trễ hoặc nguyên nhân chưa được tracking xác nhận")
+
+    if tool == "notify_carrier":
+        payload = action.get("payload") or {}
+        safe_payload = {key: payload[key] for key in ("order_id", "parcel_id", "delay_days")
+                        if key in payload}
+        if safe_payload != payload:
+            ctx.log("carrier_payload_minimized", removed_fields=sorted(set(payload) - set(safe_payload)))
+            return Verdict.modify("chỉ gửi dữ liệu tối thiểu cần thiết cho hãng", payload=safe_payload)
+
     return Verdict.allow()

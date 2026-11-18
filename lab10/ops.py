@@ -112,7 +112,7 @@ def in_scope(ticket: dict, world_data: dict, gates: dict) -> bool:
     sc = gates["business"]["pilot_scope"]
     if sc["mode"] == "warehouse":
         order = next((o for o in world_data["orders"] if o["order_id"] == ticket.get("order_id")), None)
-        return order is None or order.get("warehouse_id") in sc["warehouses"]
+        return order is not None and order.get("warehouse_id") in sc["warehouses"]
     if sc["mode"] == "percent":
         return _pct("scope|" + ticket["ticket_id"]) < sc["percent"]
     return True

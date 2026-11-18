@@ -56,6 +56,11 @@ def write_gate(ctx, action):
     if tool == "issue_refund":
         if policy is None:
             return Verdict.escalate("không xác minh được chính sách áp dụng")
+        requested_parcel = ctx.ticket.get("parcel_id")
+        if requested_parcel and not any(p["parcel_id"] == requested_parcel for p in order["parcels"]):
+            return Verdict.escalate("mã kiện trong yêu cầu không thuộc đơn; cần người xác minh")
+        if ctx.tools.ledger_rows(order_id=order_id):
+            return Verdict.escalate("đơn đã có khoản hoàn trong sổ; cần đối soát trước khi ghi thêm")
         parcel = H.ticket_parcel(order, ctx.ticket, ctx.as_of)
         delay = H.db_delay_days(parcel, ctx.as_of)
         cause = parcel.get("delay_cause") or ("CARRIER" if delay > 0 else None)
@@ -69,6 +74,12 @@ def write_gate(ctx, action):
         parcel = next((p for p in order["parcels"] if p["parcel_id"] == action.get("parcel_id")), None)
         if policy is None or parcel is None:
             return Verdict.deny("không xác minh được chính sách hoặc kiện hàng để ghi lỗi hãng")
+        requested_parcel = ctx.ticket.get("parcel_id")
+        if requested_parcel and action.get("parcel_id") != requested_parcel:
+            return Verdict.deny("không ghi lỗi cho kiện khác kiện được yêu cầu xác minh")
+        if (action.get("carrier_id") != parcel.get("carrier_id")
+                or action.get("driver_id") != parcel.get("driver_id")):
+            return Verdict.deny("hãng hoặc tài xế không khớp hồ sơ kiện hàng")
         delay = H.db_delay_days(parcel, ctx.as_of)
         if (action.get("delay_days") != delay
                 or not H.carrier_at_fault(policy, parcel, delay)):

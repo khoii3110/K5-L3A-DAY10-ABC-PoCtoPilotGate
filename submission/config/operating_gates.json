@@ -18,7 +18,7 @@
       "Khi phát hiện PII trong payload gửi hãng, tắt notify_carrier và xử lý sự cố trước khi bật lại.",
       "Khi có ca chờ quá 60 phút hoặc hết ca chưa xử lý, thu hẹp phạm vi và gọi NV-TUNG."
     ],
-    "alert_channel": "",
+    "alert_channel": "Kênh ca vận hành (đội xác nhận kênh liên lạc trước pilot)",
     "decision_note": true,
     "review_sampling_pct": 10
   },
